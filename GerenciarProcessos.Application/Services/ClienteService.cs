@@ -44,10 +44,20 @@ public class ClienteService : IClienteService
             throw new Exception("Cliente não encontrado");
 
         clienteExistente.Nome = dto.Nome;
-        clienteExistente.Documento = dto.Documento;
+        clienteExistente.CPF = dto.CPF;
         clienteExistente.Email = dto.Email;
         clienteExistente.Telefone = dto.Telefone;
-        clienteExistente.Endereco = dto.Endereco;
+        clienteExistente.TipoPessoa = dto.TipoPessoa;
+        clienteExistente.Sexo = dto.Sexo;
+        clienteExistente.Nacionalidade = dto.Nacionalidade;
+        clienteExistente.CEP = dto.CEP;
+        clienteExistente.Cidade = dto.Cidade;   
+        clienteExistente.Estado = dto.Estado;   
+        clienteExistente.DataNascimento = dto.DataNascimento;
+        clienteExistente.Logradouro = dto.Logradouro;
+        clienteExistente.Numero = dto.Numero;
+        clienteExistente.Bairro = dto.Bairro;
+        clienteExistente.Pais = dto.Pais;
 
         await _clienteRepository.AtualizarAsync(clienteExistente);
     }

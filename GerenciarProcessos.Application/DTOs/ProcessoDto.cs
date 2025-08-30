@@ -12,5 +12,6 @@ namespace GerenciarProcessos.Application.Dtos
         public DateTime DataAbertura { get; set; }
         public StatusProcesso Status { get; set; }
         public int ClienteId { get; set; }
+        public string? ArquivoUrl { get; set; }
     }
 }

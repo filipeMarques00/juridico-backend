@@ -32,14 +32,14 @@ namespace GerenciarProcessos.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProcessoDto>> Criar(CriarProcessoDto dto)
+        public async Task<ActionResult<ProcessoDto>> Criar([FromForm] CriarProcessoDto dto)
         {
             var novoProcesso = await _processoService.CriarAsync(dto);
             return CreatedAtAction(nameof(ObterPorId), new { id = novoProcesso.Id }, novoProcesso);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Atualizar(int id, CriarProcessoDto dto)
+        public async Task<IActionResult> Atualizar(int id, [FromForm] CriarProcessoDto dto)
         {
             try
             {
@@ -51,6 +51,7 @@ namespace GerenciarProcessos.API.Controllers
                 return NotFound(e.Message);
             }
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remover(int id)

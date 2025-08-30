@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GerenciarProcessos.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,10 +12,22 @@ namespace GerenciarProcessos.Domain.Entities
     {
         public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;
-        public string Documento { get; set; } = string.Empty; // CPF ou CNPJ
+        public string CPF { get; set; } = string.Empty; 
         public string Email { get; set; } = string.Empty;
         public string Telefone { get; set; } = string.Empty;
-        public string Endereco { get; set; } = string.Empty;
+
+        public TipoPessoa TipoPessoa { get; set; }
+        public DateTime? DataNascimento { get; set; }
+        public Sexo? Sexo { get; set; }
+        public string Nacionalidade { get; set; } = string.Empty;
+
+        public string CEP { get; set; } = string.Empty;
+        public string Logradouro { get; set; } = string.Empty;
+        public string Numero { get; set; } = string.Empty;
+        public string Bairro { get; set; } = string.Empty;
+        public string Cidade { get; set; } = string.Empty;
+        public string Estado { get; set; } = string.Empty;
+        public string Pais { get; set; } = "Brasil";
 
         public ICollection<Processo> Processos { get; set; } = new List<Processo>();
     }

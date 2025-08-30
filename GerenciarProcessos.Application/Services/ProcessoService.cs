@@ -33,9 +33,29 @@ namespace GerenciarProcessos.Application.Services
         {
             var processo = _mapper.Map<Processo>(dto);
             processo.Status = Domain.Enums.StatusProcesso.Ativo;
+
+            // 🔹 Se houver arquivo, salvar em wwwroot/uploads/processos
+            if (dto.Arquivo != null)
+            {
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "processos");
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var fileName = $"{Guid.NewGuid()}_{dto.Arquivo.FileName}";
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await dto.Arquivo.CopyToAsync(stream);
+                }
+
+                processo.ArquivoUrl = $"/uploads/processos/{fileName}";
+            }
+
             await _processoRepository.AdicionarAsync(processo);
             return _mapper.Map<ProcessoDto>(processo);
         }
+
 
         public async Task AtualizarAsync(int id, CriarProcessoDto dto)
         {
@@ -43,7 +63,26 @@ namespace GerenciarProcessos.Application.Services
             if (processo == null)
                 throw new Exception("Processo não encontrado.");
 
-            _mapper.Map(dto, processo); // atualiza os campos
+            _mapper.Map(dto, processo);
+
+            // 🔹 Atualizar PDF se enviado
+            if (dto.Arquivo != null)
+            {
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "processos");
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var fileName = $"{Guid.NewGuid()}_{dto.Arquivo.FileName}";
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await dto.Arquivo.CopyToAsync(stream);
+                }
+
+                processo.ArquivoUrl = $"/uploads/processos/{fileName}";
+            }
+
             await _processoRepository.AtualizarAsync(processo);
         }
 

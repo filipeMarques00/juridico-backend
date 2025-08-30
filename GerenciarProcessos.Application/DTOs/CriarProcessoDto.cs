@@ -1,4 +1,6 @@
-﻿namespace GerenciarProcessos.Application.Dtos
+﻿using Microsoft.AspNetCore.Http;
+
+namespace GerenciarProcessos.Application.Dtos
 {
     public class CriarProcessoDto
     {
@@ -8,5 +10,6 @@
         public string Comarca { get; set; }
         public DateTime DataAbertura { get; set; }
         public int ClienteId { get; set; }
+        public IFormFile? Arquivo { get; set; }
     }
 }
