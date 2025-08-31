@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /GerenciarProcessos.API/appsettings.Development.json
 /GerenciarProcessos.Infrastructure/Data/AppDbContextFactory.cs
+/GerenciarProcessos.Infrastructure/Migrations/AppDbContextModelSnapshot.cs
