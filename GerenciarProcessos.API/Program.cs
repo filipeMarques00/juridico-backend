@@ -86,7 +86,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("PermitirFrontend",
         policy => policy
            
-            .WithOrigins("http://localhost:5173", "https://seu-app-frontend.vercel.app")
+            .WithOrigins("http://localhost:5173", "https://gerenciar-processos-front.vercel.app/")
             .AllowAnyHeader()
             .AllowAnyMethod());
     
@@ -94,17 +94,15 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Use o CORS que você já configurou
 app.UseCors("PermitirFrontend");
 
 // Habilita o Swagger para todos os ambientes
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// Deixe o bloco 'if' se você tiver outras coisas específicas de desenvolvimento
 if (app.Environment.IsDevelopment())
 {
-    // Ex: app.UseDeveloperExceptionPage();
+   
 }
 
 //app.UseHttpsRedirection();
