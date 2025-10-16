@@ -20,5 +20,8 @@ namespace GerenciarProcessos.Domain.Entities
         public int ClienteId { get; set; }
         public Cliente Cliente { get; set; }
         public string? ArquivoUrl { get; set; }
+
+        public int UsuarioId { get; set; }
+        public virtual Usuario Usuario { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using GerenciarProcessos.Domain.Entities;
+﻿// GerenciarProcessos.Infrastructure/Repositories/ProcessoRepository.cs
+
+using GerenciarProcessos.Domain.Entities;
 using GerenciarProcessos.Domain.Interfaces;
 using GerenciarProcessos.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -14,18 +16,23 @@ namespace GerenciarProcessos.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Processo>> ObterTodosAsync()
+        // ✅ NOVO MÉTODO: Retorna todos os processos APENAS do usuário logado.
+        public async Task<IEnumerable<Processo>> ObterTodosPorUsuarioAsync(int usuarioId)
         {
             return await _context.Processos
                 .Include(p => p.Cliente)
+                .AsNoTracking()
+                .Where(p => p.UsuarioId == usuarioId) // A cláusula de segurança
                 .ToListAsync();
         }
 
-        public async Task<Processo?> ObterPorIdAsync(int id)
+        // ✅ NOVO MÉTODO: Retorna um processo específico APENAS se ele pertencer ao usuário logado.
+        public async Task<Processo?> ObterPorIdEUsuarioAsync(int id, int usuarioId)
         {
             return await _context.Processos
                 .Include(p => p.Cliente)
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == id && p.UsuarioId == usuarioId); // A cláusula de segurança
         }
 
         public async Task AdicionarAsync(Processo processo)
@@ -42,7 +49,8 @@ namespace GerenciarProcessos.Infrastructure.Repositories
 
         public async Task RemoverAsync(int id)
         {
-            var processo = await ObterPorIdAsync(id);
+            // A verificação de posse do processo é feita no Service antes de chamar este método.
+            var processo = await _context.Processos.FindAsync(id);
             if (processo != null)
             {
                 _context.Processos.Remove(processo);

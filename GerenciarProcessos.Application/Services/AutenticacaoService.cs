@@ -22,30 +22,12 @@ namespace GerenciarProcessos.Application.Services
             _configuration = configuration;
         }
 
-        public async Task<UsuarioLoginDto?> LoginAsync(LoginModel login)
-        {
-            var usuario = await _usuarioRepository.ObterPorEmailAsync(login.Email);
-
-            if (usuario == null || !BCrypt.Net.BCrypt.Verify(login.Senha, usuario.SenhaHash))
-                return null;
-
-            var token = GerarTokenJwt(usuario.Email, usuario.Perfil.ToString());
-
-            return new UsuarioLoginDto
-            {
-                Nome = usuario.Nome,
-                Email = usuario.Email,
-                Perfil = usuario.Perfil.ToString(),
-                Token = token
-            };
-        }
-
-
-        private string GerarTokenJwt(string email, string perfil)
+        private string GerarTokenJwt(int usuarioId, string email, string perfil)
         {
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
             var claims = new[]
             {
+                new Claim(ClaimTypes.NameIdentifier, usuarioId.ToString()), 
                 new Claim(ClaimTypes.Email, email),
                 new Claim(ClaimTypes.Role, perfil)
             };
@@ -62,6 +44,24 @@ namespace GerenciarProcessos.Application.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<UsuarioLoginDto?> LoginAsync(LoginModel login)
+        {
+            var usuario = await _usuarioRepository.ObterPorEmailAsync(login.Email);
+
+            if (usuario == null || !BCrypt.Net.BCrypt.Verify(login.Senha, usuario.SenhaHash))
+                return null;
+
+            var token = GerarTokenJwt(usuario.Id, usuario.Email, usuario.Perfil.ToString());
+
+            return new UsuarioLoginDto
+            {
+                Nome = usuario.Nome,
+                Email = usuario.Email,
+                Perfil = usuario.Perfil.ToString(),
+                Token = token
+            };
         }
     }
 }

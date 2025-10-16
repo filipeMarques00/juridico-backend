@@ -1,11 +1,13 @@
 ﻿using GerenciarProcessos.Application.Dtos;
 using GerenciarProcessos.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciarProcessos.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ProcessosController : ControllerBase
     {
         private readonly IProcessoService _processoService;

@@ -4,8 +4,8 @@ namespace GerenciarProcessos.Domain.Interfaces;
 
 public interface IProcessoRepository
 {
-    Task<IEnumerable<Processo>> ObterTodosAsync();
-    Task<Processo?> ObterPorIdAsync(int id);
+    Task<IEnumerable<Processo>> ObterTodosPorUsuarioAsync(int usuarioId);
+    Task<Processo?> ObterPorIdEUsuarioAsync(int id, int usuarioId);
     Task AdicionarAsync(Processo processo);
     Task AtualizarAsync(Processo processo);
     Task RemoverAsync(int id);

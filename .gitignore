@@ -364,4 +364,4 @@ FodyWeavers.xsd
 /GerenciarProcessos.API/appsettings.Development.json
 /GerenciarProcessos.Infrastructure/Data/AppDbContextFactory.cs
 /GerenciarProcessos.Infrastructure/Migrations/AppDbContextModelSnapshot.cs
-/GerenciarProcessos.API/wwwroot/uploads/processos/089e4d37-cf4d-41ea-90b8-61523fbca37c_CPF_ATUALIZADO_LAIS.pdf
+/GerenciarProcessos.API/wwwroot/uploads/processos

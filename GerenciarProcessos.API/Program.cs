@@ -11,16 +11,13 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Adiciona serviços à injeção de dependência, incluindo o Configuration
 var configuration = builder.Configuration;
-
-// Configuração da autenticação JWT
 var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]);
-
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
@@ -30,8 +27,6 @@ builder.Services.AddScoped<IAutenticacaoService, AutenticacaoService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddHttpClient();
-
-
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -54,15 +49,9 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen(c =>
-//{
-//    c.SwaggerDoc("v1", new OpenApiInfo { Title = "GerenciarProcessos API", Version = "v1" });
-//});
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "GerenciarProcessos API", Version = "v1" });
-
-    // Configuração do JWT no Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "Insira o token JWT assim: Bearer {seu token}",
@@ -71,7 +60,6 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
-
     c.AddSecurityRequirement(new OpenApiSecurityRequirement()
     {
         {
@@ -92,20 +80,21 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddControllers();
 
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("PermitirFrontend",
         policy => policy
-            .WithOrigins("http://localhost:5173")
+           
+            .WithOrigins("http://localhost:5173", "https://seu-app-frontend.vercel.app")
             .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials());
+            .AllowAnyMethod());
+    
 });
 
 var app = builder.Build();
-// Ativa o CORS com a política definida
-app.UseCors("PermitirFrontend");
 
+app.UseCors("PermitirFrontend");
 
 if (app.Environment.IsDevelopment())
 {
@@ -113,8 +102,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();

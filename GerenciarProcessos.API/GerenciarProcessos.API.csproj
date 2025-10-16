@@ -17,7 +17,6 @@
   <ItemGroup>
     <ProjectReference Include="..\GerenciarProcessos.Application\GerenciarProcessos.Application.csproj" />
     <ProjectReference Include="..\GerenciarProcessos.Infrastructure\GerenciarProcessos.Infrastructure.csproj" />
-    <ProjectReference Include="..\GerenciarProcessos.Shared\GerenciarProcessos.Shared.csproj" />
   </ItemGroup>
 
 	<ItemGroup>

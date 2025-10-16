@@ -1,4 +1,6 @@
-﻿using GerenciarProcessos.Domain.Entities;
+﻿// GerenciarProcessos.Infrastructure/Repositories/ClienteRepository.cs
+
+using GerenciarProcessos.Domain.Entities;
 using GerenciarProcessos.Domain.Interfaces;
 using GerenciarProcessos.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -14,14 +16,21 @@ public class ClienteRepository : IClienteRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Cliente>> ObterTodosAsync()
+    // ✅ NOVO MÉTODO: Retorna todos os clientes APENAS do usuário logado.
+    public async Task<IEnumerable<Cliente>> ObterTodosPorUsuarioAsync(int usuarioId)
     {
-        return await _context.Clientes.AsNoTracking().ToListAsync();
+        return await _context.Clientes
+            .AsNoTracking()
+            .Where(c => c.UsuarioId == usuarioId) // A cláusula de segurança
+            .ToListAsync();
     }
 
-    public async Task<Cliente?> ObterPorIdAsync(int id)
+    // ✅ NOVO MÉTODO: Retorna um cliente específico APENAS se ele pertencer ao usuário logado.
+    public async Task<Cliente?> ObterPorIdEUsuarioAsync(int id, int usuarioId)
     {
-        return await _context.Clientes.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+        return await _context.Clientes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Id == id && c.UsuarioId == usuarioId); // A cláusula de segurança
     }
 
     public async Task AdicionarAsync(Cliente cliente)
@@ -38,6 +47,7 @@ public class ClienteRepository : IClienteRepository
 
     public async Task RemoverAsync(int id)
     {
+        // A verificação de posse do cliente é feita no Service antes de chamar este método.
         var cliente = await _context.Clientes.FindAsync(id);
         if (cliente is null) return;
 

@@ -30,5 +30,7 @@ namespace GerenciarProcessos.Domain.Entities
         public string Pais { get; set; } = "Brasil";
 
         public ICollection<Processo> Processos { get; set; } = new List<Processo>();
+        public int UsuarioId { get; set; }
+        public virtual Usuario Usuario { get; set; }
     }
 }
