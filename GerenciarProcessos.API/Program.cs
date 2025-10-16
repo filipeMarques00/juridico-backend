@@ -94,12 +94,17 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Use o CORS que você já configurou
 app.UseCors("PermitirFrontend");
 
+// Habilita o Swagger para todos os ambientes
+app.UseSwagger();
+app.UseSwaggerUI();
+
+// Deixe o bloco 'if' se você tiver outras coisas específicas de desenvolvimento
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    // Ex: app.UseDeveloperExceptionPage();
 }
 
 //app.UseHttpsRedirection();
