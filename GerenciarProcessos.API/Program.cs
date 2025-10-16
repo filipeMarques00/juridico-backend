@@ -81,22 +81,20 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddControllers();
 
 
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("PermitirFrontend",
         policy => policy
-           
-            .WithOrigins("http://localhost:5173", "https://gerenciar-processos-front.vercel.app/")
+            .WithOrigins("http://localhost:5173", "https://gerenciar-processos-front.vercel.app")
             .AllowAnyHeader()
             .AllowAnyMethod());
-    
 });
 
 var app = builder.Build();
 
 app.UseCors("PermitirFrontend");
 
-// Habilita o Swagger para todos os ambientes
 app.UseSwagger();
 app.UseSwaggerUI();
 
