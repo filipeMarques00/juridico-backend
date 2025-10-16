@@ -9,7 +9,7 @@ public class CriarClienteDto
     public string Email { get; set; } = string.Empty;
     public string Telefone { get; set; } = string.Empty;
     public TipoPessoa TipoPessoa { get; set; }
-    public DateTime? DataNascimento { get; set; }
+    public DateTime DataNascimento { get; set; }
     public Sexo? Sexo { get; set; }
     public string Nacionalidade { get; set; } = string.Empty;
 

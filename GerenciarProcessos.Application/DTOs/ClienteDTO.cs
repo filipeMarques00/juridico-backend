@@ -12,7 +12,7 @@ public class ClienteDto
     public string Endereco { get; set; } = string.Empty;
 
     public TipoPessoa TipoPessoa { get; set; }
-    public DateTime? DataNascimento { get; set; }
+    public DateTime DataNascimento { get; set; }
     public Sexo? Sexo { get; set; }
     public string Nacionalidade { get; set; } = string.Empty;
 
