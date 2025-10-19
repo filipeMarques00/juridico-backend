@@ -3,8 +3,8 @@ using GerenciarProcessos.Application.Dtos;
 using GerenciarProcessos.Application.Interfaces;
 using GerenciarProcessos.Domain.Entities;
 using GerenciarProcessos.Domain.Interfaces;
-using Microsoft.AspNetCore.Http; 
-using System.Security.Claims; 
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace GerenciarProcessos.Application.Services
 {
@@ -13,7 +13,7 @@ namespace GerenciarProcessos.Application.Services
         private readonly IProcessoRepository _processoRepository;
         private readonly IClienteRepository _clienteRepository;
         private readonly IMapper _mapper;
-        private readonly int _usuarioId; 
+        private readonly int _usuarioId;
 
         public ProcessoService(IProcessoRepository processoRepository, IClienteRepository clienteRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
@@ -28,8 +28,6 @@ namespace GerenciarProcessos.Application.Services
             }
         }
 
-
-
         public async Task<ProcessoDto> CriarAsync(CriarProcessoDto dto)
         {
             var clienteDoUsuario = await _clienteRepository.ObterPorIdEUsuarioAsync(dto.ClienteId, _usuarioId);
@@ -39,8 +37,11 @@ namespace GerenciarProcessos.Application.Services
             }
 
             var processo = _mapper.Map<Processo>(dto);
-            processo.UsuarioId = _usuarioId; 
+            processo.UsuarioId = _usuarioId;
+
             processo.Status = Domain.Enums.StatusProcesso.Ativo;
+
+            processo.DataAbertura = DateTime.SpecifyKind(dto.DataAbertura, DateTimeKind.Utc);
 
             if (dto.Arquivo != null)
             {
@@ -77,7 +78,16 @@ namespace GerenciarProcessos.Application.Services
                     throw new Exception("O novo cliente informado não existe ou não pertence ao usuário logado.");
                 }
             }
-            _mapper.Map(dto, processo);
+
+            processo.Numero = dto.Numero;
+            processo.Tipo = dto.Tipo;
+            processo.Vara = dto.Vara;
+            processo.Comarca = dto.Comarca;
+            processo.ClienteId = dto.ClienteId;
+
+            processo.Status = (Domain.Enums.StatusProcesso)dto.Status;
+
+            processo.DataAbertura = DateTime.SpecifyKind(dto.DataAbertura, DateTimeKind.Utc);
 
             if (dto.Arquivo != null)
             {

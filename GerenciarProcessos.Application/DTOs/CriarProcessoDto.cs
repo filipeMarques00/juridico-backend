@@ -11,5 +11,6 @@ namespace GerenciarProcessos.Application.Dtos
         public DateTime DataAbertura { get; set; }
         public int ClienteId { get; set; }
         public IFormFile? Arquivo { get; set; }
+        public int Status { get; set; }
     }
 }
