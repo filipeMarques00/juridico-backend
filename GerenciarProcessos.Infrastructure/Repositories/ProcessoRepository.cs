@@ -16,23 +16,20 @@ namespace GerenciarProcessos.Infrastructure.Repositories
             _context = context;
         }
 
-        // ✅ NOVO MÉTODO: Retorna todos os processos APENAS do usuário logado.
         public async Task<IEnumerable<Processo>> ObterTodosPorUsuarioAsync(int usuarioId)
         {
             return await _context.Processos
                 .Include(p => p.Cliente)
                 .AsNoTracking()
-                .Where(p => p.UsuarioId == usuarioId) // A cláusula de segurança
+                .Where(p => p.UsuarioId == usuarioId) 
                 .ToListAsync();
         }
 
-        // ✅ NOVO MÉTODO: Retorna um processo específico APENAS se ele pertencer ao usuário logado.
         public async Task<Processo?> ObterPorIdEUsuarioAsync(int id, int usuarioId)
         {
             return await _context.Processos
-                .Include(p => p.Cliente)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(p => p.Id == id && p.UsuarioId == usuarioId); // A cláusula de segurança
+                .FirstOrDefaultAsync(p => p.Id == id && p.UsuarioId == usuarioId); 
         }
 
         public async Task AdicionarAsync(Processo processo)
@@ -49,7 +46,6 @@ namespace GerenciarProcessos.Infrastructure.Repositories
 
         public async Task RemoverAsync(int id)
         {
-            // A verificação de posse do processo é feita no Service antes de chamar este método.
             var processo = await _context.Processos.FindAsync(id);
             if (processo != null)
             {
